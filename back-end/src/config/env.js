@@ -9,7 +9,7 @@ const env = {
         host: process.env.DB_HOST || '172.18.208.1',
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '1234',
-        database: process.env.NAME || 'Connect_Food'
+        database: process.env.NAME || 'connect_food'
     },
 };
 
