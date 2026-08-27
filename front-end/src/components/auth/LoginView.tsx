@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UtensilsCrossed, KeyRound, UserCheck, Loader2 } from 'lucide-react';
+import { UtensilsCrossed, Loader2 } from 'lucide-react';
 import { api } from '../../services/api';
 import type { User } from '../../types';
 
@@ -40,12 +40,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDemoSelect = (demoEmail: string) => {
-    setEmail(demoEmail);
-    setPassword('123456');
-    handleLoginSubmit(null as any, demoEmail, '123456');
   };
 
   return (
@@ -126,52 +120,6 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess }) => {
             </button>
           </div>
         </form>
-      </div>
-
-      {/* Demo Credentials Card */}
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-xs rounded-xl p-5 mt-4 border border-emerald-100 text-center shadow-xs">
-        <div className="flex items-center justify-center gap-1.5 text-gray-700 text-xs font-semibold mb-3">
-          <KeyRound className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Acessos de demonstração (senha: 123456)</span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          <button
-            disabled={loading}
-            onClick={() => handleDemoSelect('aluno@sesi.com')}
-            className="p-2.5 bg-emerald-50 hover:bg-emerald-100 rounded-lg text-left transition-colors border border-emerald-100 group disabled:opacity-50"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-emerald-800">Aluno</span>
-              <UserCheck className="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <p className="text-[10px] text-gray-500 truncate mt-0.5">aluno@sesi.com</p>
-          </button>
-
-          <button
-            disabled={loading}
-            onClick={() => handleDemoSelect('nutri@sesi.com')}
-            className="p-2.5 bg-emerald-50 hover:bg-emerald-100 rounded-lg text-left transition-colors border border-emerald-100 group disabled:opacity-50"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-emerald-800">Nutricionista</span>
-              <UserCheck className="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <p className="text-[10px] text-gray-500 truncate mt-0.5">nutri@sesi.com</p>
-          </button>
-
-          <button
-            disabled={loading}
-            onClick={() => handleDemoSelect('direcao@sesi.com')}
-            className="p-2.5 bg-emerald-50 hover:bg-emerald-100 rounded-lg text-left transition-colors border border-emerald-100 group disabled:opacity-50"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-emerald-800">Direção</span>
-              <UserCheck className="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <p className="text-[10px] text-gray-500 truncate mt-0.5">direcao@sesi.com</p>
-          </button>
-        </div>
       </div>
     </div>
   );
