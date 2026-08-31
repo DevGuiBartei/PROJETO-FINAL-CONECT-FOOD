@@ -101,34 +101,40 @@ export const App: React.FC = () => {
   };
 
   // Add new student
-  const handleAddStudent = async (studentData: Omit<User, 'id' | 'createdAt'>) => {
-    try {
-      const res = await api.createStudent({
-        name: studentData.name,
-        cpf: studentData.cpf,
-        email: studentData.email,
-        schoolYear: studentData.schoolYear,
-        dietaryRestriction: studentData.dietaryRestriction,
-      });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
-    } catch (err: any) {
-      alert(err.message || 'Erro ao cadastrar aluno');
-    }
-  };
+  const handleAddStudent = async (studentData: Omit<User, 'id' | 'createdAt'> & { password: string }) => {
+  try {
+    const res = await api.createStudent({
+      name: studentData.name,
+      cpf: studentData.cpf,
+      email: studentData.email,
+      password: studentData.password,
+      schoolYear: studentData.schoolYear,
+      dietaryRestriction: studentData.dietaryRestriction,
+    });
+
+    setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+  } catch (err: any) {
+    alert(err.message || 'Erro ao cadastrar aluno');
+  }
+};
 
   // Add new nutritionist
-  const handleAddNutritionist = async (nutriData: Omit<User, 'id' | 'createdAt'>) => {
-    try {
-      const res = await api.createNutritionist({
-        name: nutriData.name,
-        cpf: nutriData.cpf,
-        email: nutriData.email,
-      });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
-    } catch (err: any) {
-      alert(err.message || 'Erro ao cadastrar nutricionista');
-    }
-  };
+  const handleAddNutritionist = async (
+  nutriData: Omit<User, 'id' | 'createdAt'> & { password: string }
+) => {
+  try {
+    const res = await api.createNutritionist({
+      name: nutriData.name,
+      cpf: nutriData.cpf,
+      email: nutriData.email,
+      password: nutriData.password,
+    });
+
+    setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+  } catch (err: any) {
+    alert(err.message || 'Erro ao cadastrar nutricionista');
+  }
+};
 
   // Toggle user status (Ativo / Inativo)
   const handleToggleUserStatus = async (userId: string) => {

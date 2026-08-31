@@ -62,37 +62,31 @@ export const api = {
     });
   },
 
-  createStudent: async (studentData: {
-    name: string;
-    cpf: string;
-    email: string;
-    password?: string;
-    schoolYear?: string;
-    dietaryRestriction?: string;
-  }): Promise<{ user: User }> => {
-    return request<{ user: User }>('/usuarios/aluno', {
-      method: 'POST',
-      body: JSON.stringify({
-        ...studentData,
-        password: studentData.password || '123456',
-      }),
-    });
-  },
+ createStudent: async (studentData: {
+  name: string;
+  cpf: string;
+  email: string;
+  password: string;
+  schoolYear?: string;
+  dietaryRestriction?: string;
+}): Promise<{ user: User }> => {
+  return request<{ user: User }>('/usuarios/aluno', {
+    method: 'POST',
+    body: JSON.stringify(studentData),
+  });
+},
 
   createNutritionist: async (nutriData: {
-    name: string;
-    cpf: string;
-    email: string;
-    password?: string;
-  }): Promise<{ user: User }> => {
-    return request<{ user: User }>('/usuarios/nutricionista', {
-      method: 'POST',
-      body: JSON.stringify({
-        ...nutriData,
-        password: nutriData.password || '123456',
-      }),
-    });
-  },
+  name: string;
+  cpf: string;
+  email: string;
+  password: string;
+}): Promise<{ user: User }> => {
+  return request<{ user: User }>('/usuarios/nutricionista', {
+    method: 'POST',
+    body: JSON.stringify(nutriData),
+  });
+},
 
   toggleUserStatus: async (userId: string): Promise<{ status: string }> => {
     return request<{ status: string }>(`/usuarios/${userId}/status`, {
