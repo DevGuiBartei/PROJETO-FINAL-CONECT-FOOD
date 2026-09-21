@@ -100,6 +100,26 @@ export const api = {
     });
   },
 
+  updateUser: async (
+    userId: string,
+    userData: {
+      name: string;
+      cpf: string;
+      email: string;
+      schoolYear?: string;
+      role: string;
+      dietaryRestriction?: string;
+    }
+  ): Promise<{ mensagem: string; user: User }> => {
+    return request<{ mensagem: string; user: User }>(
+      `/usuarios/${userId}`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(userData),
+      }
+    );
+  },
+
   getComments: async (): Promise<CommentItem[]> => {
     return request<CommentItem[]>('/comentarios', {
       method: 'GET',

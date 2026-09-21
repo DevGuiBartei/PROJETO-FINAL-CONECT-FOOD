@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import type { User, CommentItem, DailyMealPlan } from './types';
-import { api } from './services/api';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import type { User, CommentItem, DailyMealPlan } from "./types";
+import { api } from "./services/api";
+import { Loader2 } from "lucide-react";
 
 // Components
-import { Header } from './components/common/Header';
-import { LoginView } from './components/auth/LoginView';
-import { ProfileModal } from './components/profile/ProfileModal';
+import { Header } from "./components/common/Header";
+import { LoginView } from "./components/auth/LoginView";
+import { ProfileModal } from "./components/profile/ProfileModal";
 
 // Direção views
-import { DashboardView } from './components/direccion/DashboardView';
-import { StudentRegisterView } from './components/direccion/StudentRegisterView';
-import { NutritionistRegisterView } from './components/direccion/NutritionistRegisterView';
-import { UserManagementView } from './components/direccion/UserManagementView';
-import { CommentModerationView } from './components/direccion/CommentModerationView';
+import { DashboardView } from "./components/direccion/DashboardView";
+import { StudentRegisterView } from "./components/direccion/StudentRegisterView";
+import { NutritionistRegisterView } from "./components/direccion/NutritionistRegisterView";
+import { UserManagementView } from "./components/direccion/UserManagementView";
+import { CommentModerationView } from "./components/direccion/CommentModerationView";
 
 // Nutricionista views
-import { MenuManagementView } from './components/nutritionist/MenuManagementView';
+import { MenuManagementView } from "./components/nutritionist/MenuManagementView";
 
 // Aluno views
-import { StudentMenuView } from './components/student/StudentMenuView';
+import { StudentMenuView } from "./components/student/StudentMenuView";
 
 export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -29,18 +29,23 @@ export const App: React.FC = () => {
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [mealPlans, setMealPlans] = useState<Record<string, DailyMealPlan>>({});
 
-  const [activeTab, setActiveTab] = useState<string>('painel');
+  const [activeTab, setActiveTab] = useState<string>("painel");
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
-  const [selectedUserForModal, setSelectedUserForModal] = useState<User | null>(null);
+  const [selectedUserForModal, setSelectedUserForModal] = useState<User | null>(
+    null,
+  );
 
   // Helper to load fresh data from API
   const loadBackendData = async () => {
     try {
-      const [fetchedUsers, fetchedComments, fetchedCardapio] = await Promise.all([
-        api.getUsers().catch(() => []),
-        api.getComments().catch(() => []),
-        api.getCardapioSemanal().catch(() => ({ cardapio: null, mealPlans: {} })),
-      ]);
+      const [fetchedUsers, fetchedComments, fetchedCardapio] =
+        await Promise.all([
+          api.getUsers().catch(() => []),
+          api.getComments().catch(() => []),
+          api
+            .getCardapioSemanal()
+            .catch(() => ({ cardapio: null, mealPlans: {} })),
+        ]);
 
       setUsers(fetchedUsers || []);
       setComments(fetchedComments || []);
@@ -48,7 +53,7 @@ export const App: React.FC = () => {
         setMealPlans(fetchedCardapio.mealPlans);
       }
     } catch (err) {
-      console.error('Erro ao carregar dados do servidor:', err);
+      console.error("Erro ao carregar dados do servidor:", err);
     }
   };
 
@@ -60,9 +65,9 @@ export const App: React.FC = () => {
         if (response.usuario) {
           setCurrentUser(response.usuario);
           const role = response.usuario.role;
-          if (role === 'direcao') setActiveTab('painel');
-          else if (role === 'nutricionista') setActiveTab('gerenciar-cardapio');
-          else if (role === 'aluno') setActiveTab('cardapio');
+          if (role === "direcao") setActiveTab("painel");
+          else if (role === "nutricionista") setActiveTab("gerenciar-cardapio");
+          else if (role === "aluno") setActiveTab("cardapio");
 
           await loadBackendData();
         }
@@ -81,9 +86,9 @@ export const App: React.FC = () => {
   const handleLoginSuccess = async (user: User) => {
     setCurrentUser(user);
     const role = user.role;
-    if (role === 'direcao') setActiveTab('painel');
-    else if (role === 'nutricionista') setActiveTab('gerenciar-cardapio');
-    else if (role === 'aluno') setActiveTab('cardapio');
+    if (role === "direcao") setActiveTab("painel");
+    else if (role === "nutricionista") setActiveTab("gerenciar-cardapio");
+    else if (role === "aluno") setActiveTab("cardapio");
 
     await loadBackendData();
   };
@@ -92,7 +97,7 @@ export const App: React.FC = () => {
     try {
       await api.logout();
     } catch (err) {
-      console.error('Erro no logout:', err);
+      console.error("Erro no logout:", err);
     } finally {
       setCurrentUser(null);
       setIsProfileOpen(false);
@@ -101,7 +106,9 @@ export const App: React.FC = () => {
   };
 
   // Add new student
-  const handleAddStudent = async (studentData: Omit<User, 'id' | 'createdAt'>) => {
+  const handleAddStudent = async (
+    studentData: Omit<User, "id" | "createdAt">,
+  ) => {
     try {
       const res = await api.createStudent({
         name: studentData.name,
@@ -110,23 +117,31 @@ export const App: React.FC = () => {
         schoolYear: studentData.schoolYear,
         dietaryRestriction: studentData.dietaryRestriction,
       });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+      setUsers((prev) => [
+        res.user,
+        ...prev.filter((u) => u.id !== res.user.id),
+      ]);
     } catch (err: any) {
-      alert(err.message || 'Erro ao cadastrar aluno');
+      alert(err.message || "Erro ao cadastrar aluno");
     }
   };
 
   // Add new nutritionist
-  const handleAddNutritionist = async (nutriData: Omit<User, 'id' | 'createdAt'>) => {
+  const handleAddNutritionist = async (
+    nutriData: Omit<User, "id" | "createdAt">,
+  ) => {
     try {
       const res = await api.createNutritionist({
         name: nutriData.name,
         cpf: nutriData.cpf,
         email: nutriData.email,
       });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+      setUsers((prev) => [
+        res.user,
+        ...prev.filter((u) => u.id !== res.user.id),
+      ]);
     } catch (err: any) {
-      alert(err.message || 'Erro ao cadastrar nutricionista');
+      alert(err.message || "Erro ao cadastrar nutricionista");
     }
   };
 
@@ -136,11 +151,34 @@ export const App: React.FC = () => {
       await api.toggleUserStatus(userId);
       setUsers((prev) =>
         prev.map((u) =>
-          u.id === userId ? { ...u, status: u.status === 'Ativo' ? 'Inativo' : 'Ativo' } : u
-        )
+          u.id === userId
+            ? { ...u, status: u.status === "Ativo" ? "Inativo" : "Ativo" }
+            : u,
+        ),
       );
     } catch (err: any) {
-      alert(err.message || 'Erro ao alterar status do usuário');
+      alert(err.message || "Erro ao alterar status do usuário");
+    }
+  };
+
+  const handleUpdateUser = async (userData: User) => {
+    try {
+      const res = await api.updateUser(userData.id, {
+        name: userData.name,
+        cpf: userData.cpf,
+        email: userData.email,
+        schoolYear: userData.schoolYear,
+        role: userData.role,
+        dietaryRestriction: userData.dietaryRestriction,
+      });
+
+      setUsers((prev) =>
+        prev.map((u) => (u.id === userData.id ? res.user : u)),
+      );
+
+      alert("Usuário atualizado com sucesso!");
+    } catch (err: any) {
+      alert(err.message || "Erro ao atualizar usuário");
     }
   };
 
@@ -153,15 +191,15 @@ export const App: React.FC = () => {
           c.id === commentId
             ? {
                 ...c,
-                status: 'Removido',
-                comment: 'Comentário inadequado removido pela direção.',
+                status: "Removido",
+                comment: "Comentário inadequado removido pela direção.",
                 removalReason: reason,
               }
-            : c
-        )
+            : c,
+        ),
       );
     } catch (err: any) {
-      alert(err.message || 'Erro ao remover comentário');
+      alert(err.message || "Erro ao remover comentário");
     }
   };
 
@@ -172,15 +210,15 @@ export const App: React.FC = () => {
       const newComment = await api.createComment(commentText);
       setComments((prev) => [newComment, ...prev]);
     } catch (err: any) {
-      alert(err.message || 'Erro ao adicionar comentário');
+      alert(err.message || "Erro ao adicionar comentário");
     }
   };
 
   // Update meal plan (Nutricionista)
   const handleUpdateMealPlan = (
     day: string,
-    mealType: 'breakfast' | 'lunch' | 'snack',
-    items: string[]
+    mealType: "breakfast" | "lunch" | "snack",
+    items: string[],
   ) => {
     setMealPlans((prev) => ({
       ...prev,
@@ -196,7 +234,9 @@ export const App: React.FC = () => {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-emerald-50/50">
         <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mb-3" />
-        <p className="text-xs font-semibold text-emerald-800">Verificando sessão segura...</p>
+        <p className="text-xs font-semibold text-emerald-800">
+          Verificando sessão segura...
+        </p>
       </div>
     );
   }
@@ -207,10 +247,14 @@ export const App: React.FC = () => {
   }
 
   // Calculate statistics for Direção dashboard
-  const studentCount = users.filter((u) => u.role === 'aluno').length;
-  const nutriCount = users.filter((u) => u.role === 'nutricionista').length;
-  const activeCommentsCount = comments.filter((c) => c.status === 'Ativo').length;
-  const removedCommentsCount = comments.filter((c) => c.status === 'Removido').length;
+  const studentCount = users.filter((u) => u.role === "aluno").length;
+  const nutriCount = users.filter((u) => u.role === "nutricionista").length;
+  const activeCommentsCount = comments.filter(
+    (c) => c.status === "Ativo",
+  ).length;
+  const removedCommentsCount = comments.filter(
+    (c) => c.status === "Removido",
+  ).length;
 
   return (
     <div className="min-h-screen bg-[#f4f9f5] flex flex-col font-sans antialiased text-gray-800">
@@ -229,9 +273,9 @@ export const App: React.FC = () => {
       {/* Main View Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Direção Views */}
-        {currentUser.role === 'direcao' && (
+        {currentUser.role === "direcao" && (
           <>
-            {activeTab === 'painel' && (
+            {activeTab === "painel" && (
               <DashboardView
                 studentCount={studentCount}
                 nutriCount={nutriCount}
@@ -241,15 +285,17 @@ export const App: React.FC = () => {
               />
             )}
 
-            {activeTab === 'cadastrar-aluno' && (
+            {activeTab === "cadastrar-aluno" && (
               <StudentRegisterView onAddStudent={handleAddStudent} />
             )}
 
-            {activeTab === 'cadastrar-nutricionista' && (
-              <NutritionistRegisterView onAddNutritionist={handleAddNutritionist} />
+            {activeTab === "cadastrar-nutricionista" && (
+              <NutritionistRegisterView
+                onAddNutritionist={handleAddNutritionist}
+              />
             )}
 
-            {activeTab === 'gerenciar-usuarios' && (
+            {activeTab === "gerenciar-usuarios" && (
               <UserManagementView
                 users={users}
                 onToggleUserStatus={handleToggleUserStatus}
@@ -257,10 +303,12 @@ export const App: React.FC = () => {
                   setSelectedUserForModal(user);
                   setIsProfileOpen(true);
                 }}
+                onEditUser={() => {}}
+                onSaveUser={handleUpdateUser}
               />
             )}
 
-            {activeTab === 'fiscalizar-comentarios' && (
+            {activeTab === "fiscalizar-comentarios" && (
               <CommentModerationView
                 comments={comments}
                 onRemoveComment={handleRemoveComment}
@@ -270,16 +318,16 @@ export const App: React.FC = () => {
         )}
 
         {/* Nutricionista Views */}
-        {currentUser.role === 'nutricionista' && (
+        {currentUser.role === "nutricionista" && (
           <>
-            {activeTab === 'gerenciar-cardapio' && (
+            {activeTab === "gerenciar-cardapio" && (
               <MenuManagementView
                 mealPlans={mealPlans}
                 onUpdateMealPlan={handleUpdateMealPlan}
               />
             )}
 
-            {activeTab === 'comentarios' && (
+            {activeTab === "comentarios" && (
               <div className="space-y-6 max-w-5xl mx-auto">
                 <div>
                   <h2 className="text-2xl font-extrabold text-gray-900">
@@ -292,20 +340,27 @@ export const App: React.FC = () => {
 
                 <div className="space-y-3">
                   {comments
-                    .filter((c) => c.status === 'Ativo')
+                    .filter((c) => c.status === "Ativo")
                     .map((item) => (
                       <div
                         key={item.id}
                         className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between"
                       >
                         <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="font-bold text-gray-900">{item.studentName}</span>
-                          <span className="text-gray-400 text-[11px]">{item.date}</span>
+                          <span className="font-bold text-gray-900">
+                            {item.studentName}
+                          </span>
+                          <span className="text-gray-400 text-[11px]">
+                            {item.date}
+                          </span>
                         </div>
-                        <p className="text-xs text-gray-600 leading-relaxed">{item.comment}</p>
+                        <p className="text-xs text-gray-600 leading-relaxed">
+                          {item.comment}
+                        </p>
                       </div>
                     ))}
-                  {comments.filter((c) => c.status === 'Ativo').length === 0 && (
+                  {comments.filter((c) => c.status === "Ativo").length ===
+                    0 && (
                     <div className="bg-white p-6 rounded-2xl text-center text-xs text-gray-400">
                       Nenhum comentário publicado pelos alunos ainda.
                     </div>
@@ -317,7 +372,7 @@ export const App: React.FC = () => {
         )}
 
         {/* Aluno Views */}
-        {currentUser.role === 'aluno' && (
+        {currentUser.role === "aluno" && (
           <StudentMenuView
             studentName={currentUser.name}
             dietaryRestriction={currentUser.dietaryRestriction}
