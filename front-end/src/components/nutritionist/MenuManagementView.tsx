@@ -137,7 +137,7 @@ export const MenuManagementView: React.FC<MenuManagementViewProps> = ({
       <div>
         <h2 className="text-2xl font-extrabold text-gray-900">Gerenciamento de Produtos e Cardápio</h2>
         <p className="text-xs text-gray-500 mt-1">
-          Cadastre produtos diretamente no MySQL e monte as refeições escolares com 1 único clique.
+          Cadastre produtos e monte as refeições escolares com 1 único clique.
         </p>
       </div>
 
@@ -160,7 +160,7 @@ export const MenuManagementView: React.FC<MenuManagementViewProps> = ({
         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
           <div className="flex items-center gap-2">
             <Package className="w-5 h-5 text-emerald-600" />
-            <h3 className="text-sm font-bold text-gray-900">Produtos Cadastrados no Banco (MySQL)</h3>
+            <h3 className="text-sm font-bold text-gray-900">Produtos Cadastrados</h3>
           </div>
           <span className="text-xs font-semibold text-gray-500">
             Total: {alimentos.length} produtos

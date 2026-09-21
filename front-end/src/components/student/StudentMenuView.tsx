@@ -83,7 +83,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-extrabold text-gray-900">Cardápio da Semana</h2>
-          <p className="text-xs text-gray-500 mt-0.5">Semana Atual — Consultada em Tempo Real no Banco</p>
+          <p className="text-xs text-gray-500 mt-0.5">Semana Atual</p>
         </div>
 
         {dietaryRestriction && (
