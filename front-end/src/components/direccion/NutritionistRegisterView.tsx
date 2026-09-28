@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import type { User } from '../../types';
 
 interface NutritionistRegisterViewProps {
-  onAddNutritionist: (newNutri: Omit<User, 'id' | 'createdAt'>) => void;
+  onAddNutritionist: (
+    newNutri: Omit<User, 'id' | 'createdAt'> & { password: string }
+  ) => void;
 }
 
 export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> = ({
@@ -18,13 +20,14 @@ export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> =
     e.preventDefault();
 
     onAddNutritionist({
-      name,
-      cpf: cpf || '...***-00',
-      email,
-      role: 'nutricionista',
-      roleLabel: 'Nutricionista',
-      status: 'Ativo',
-    });
+    name,
+    cpf,
+    email,
+    password,
+    role: 'nutricionista',
+    roleLabel: 'Nutricionista',
+    status: 'Ativo',
+  });
 
     setSuccessMsg(`Nutricionista ${name} cadastrada com sucesso!`);
     setName('');

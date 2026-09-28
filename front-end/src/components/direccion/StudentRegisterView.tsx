@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import type { User } from '../../types';
 
 interface StudentRegisterViewProps {
-  onAddStudent: (newStudent: Omit<User, 'id' | 'createdAt'>) => void;
+  onAddStudent: (
+    newStudent: Omit<User, 'id' | 'createdAt'> & { password: string }
+  ) => void;
 }
 
 export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
@@ -21,15 +23,16 @@ export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
     e.preventDefault();
 
     onAddStudent({
-      name,
-      cpf: cpf || '...***-00',
-      email,
-      role: 'aluno',
-      roleLabel: 'Aluno',
-      status: 'Ativo',
-      schoolYear,
-      dietaryRestriction: hasRestriction ? restrictionText : 'Sem restrição',
-    });
+    name,
+    cpf: cpf || '...***-00',
+    email,
+    password,
+    role: 'aluno',
+    roleLabel: 'Aluno',
+    status: 'Ativo',
+    schoolYear,
+    dietaryRestriction: hasRestriction ? restrictionText : 'Sem restrição',
+  });
 
     setSuccessMsg(`Aluno(a) ${name} cadastrado(a) com sucesso!`);
     setName('');
