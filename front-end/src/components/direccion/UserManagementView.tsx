@@ -21,6 +21,8 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
     'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'
   >('Todos');
 
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
   const filteredUsers = users.filter((u) => {
     if (filter === "Todos") return true;
     if (filter === "Aluno") return u.role === "aluno";
