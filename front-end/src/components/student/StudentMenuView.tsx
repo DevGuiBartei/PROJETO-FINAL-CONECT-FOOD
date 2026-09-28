@@ -206,7 +206,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
 
         {ratingSubmitted && (
           <p className="text-xs font-semibold text-emerald-700 animate-in fade-in">
-            Avaliação gravada no banco de dados com sucesso!
+            Avaliação feita com sucesso!
           </p>
         )}
 
