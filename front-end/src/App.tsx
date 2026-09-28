@@ -44,6 +44,7 @@ export const App: React.FC = () => {
 
       setUsers(fetchedUsers || []);
       setComments(fetchedComments || []);
+
       if (fetchedCardapio && fetchedCardapio.mealPlans) {
         setMealPlans(fetchedCardapio.mealPlans);
       }
@@ -52,14 +53,17 @@ export const App: React.FC = () => {
     }
   };
 
-  // Check active HTTP-Only cookie session on initial mount ("Manter Login")
+  // Check active HTTP-Only cookie session on initial mount
   useEffect(() => {
     const checkSession = async () => {
       try {
         const response = await api.getMe();
+
         if (response.usuario) {
           setCurrentUser(response.usuario);
+
           const role = response.usuario.role;
+
           if (role === 'direcao') setActiveTab('painel');
           else if (role === 'nutricionista') setActiveTab('gerenciar-cardapio');
           else if (role === 'aluno') setActiveTab('cardapio');
@@ -67,7 +71,6 @@ export const App: React.FC = () => {
           await loadBackendData();
         }
       } catch (err) {
-        // No active session found
         setCurrentUser(null);
       } finally {
         setCheckingAuth(false);
@@ -77,10 +80,12 @@ export const App: React.FC = () => {
     checkSession();
   }, []);
 
-  // Handle login success from LoginView
+  // Handle login success
   const handleLoginSuccess = async (user: User) => {
     setCurrentUser(user);
+
     const role = user.role;
+
     if (role === 'direcao') setActiveTab('painel');
     else if (role === 'nutricionista') setActiveTab('gerenciar-cardapio');
     else if (role === 'aluno') setActiveTab('cardapio');
@@ -110,33 +115,49 @@ export const App: React.FC = () => {
         schoolYear: studentData.schoolYear,
         dietaryRestriction: studentData.dietaryRestriction,
       });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+
+      setUsers((prev) => [
+        res.user,
+        ...prev.filter((u) => u.id !== res.user.id),
+      ]);
     } catch (err: any) {
       alert(err.message || 'Erro ao cadastrar aluno');
     }
   };
 
   // Add new nutritionist
-  const handleAddNutritionist = async (nutriData: Omit<User, 'id' | 'createdAt'>) => {
+  const handleAddNutritionist = async (
+    nutriData: Omit<User, 'id' | 'createdAt'>
+  ) => {
     try {
       const res = await api.createNutritionist({
         name: nutriData.name,
         cpf: nutriData.cpf,
         email: nutriData.email,
       });
-      setUsers((prev) => [res.user, ...prev.filter((u) => u.id !== res.user.id)]);
+
+      setUsers((prev) => [
+        res.user,
+        ...prev.filter((u) => u.id !== res.user.id),
+      ]);
     } catch (err: any) {
       alert(err.message || 'Erro ao cadastrar nutricionista');
     }
   };
 
-  // Toggle user status (Ativo / Inativo)
+  // Toggle user status
   const handleToggleUserStatus = async (userId: string) => {
     try {
       await api.toggleUserStatus(userId);
+
       setUsers((prev) =>
         prev.map((u) =>
-          u.id === userId ? { ...u, status: u.status === 'Ativo' ? 'Inativo' : 'Ativo' } : u
+          u.id === userId
+            ? {
+                ...u,
+                status: u.status === 'Ativo' ? 'Inativo' : 'Ativo',
+              }
+            : u
         )
       );
     } catch (err: any) {
@@ -144,10 +165,14 @@ export const App: React.FC = () => {
     }
   };
 
-  // Remove comment (Direção)
-  const handleRemoveComment = async (commentId: string, reason: string) => {
+  // Remove comment
+  const handleRemoveComment = async (
+    commentId: string,
+    reason: string
+  ) => {
     try {
       await api.removeComment(commentId, reason);
+
       setComments((prev) =>
         prev.map((c) =>
           c.id === commentId
@@ -168,6 +193,7 @@ export const App: React.FC = () => {
   // Add student comment
   const handleAddComment = async (commentText: string) => {
     if (!currentUser) return;
+
     try {
       const newComment = await api.createComment(commentText);
       setComments((prev) => [newComment, ...prev]);
@@ -176,7 +202,7 @@ export const App: React.FC = () => {
     }
   };
 
-  // Update meal plan (Nutricionista)
+  // Update meal plan
   const handleUpdateMealPlan = (
     day: string,
     mealType: 'breakfast' | 'lunch' | 'snack',
@@ -191,30 +217,45 @@ export const App: React.FC = () => {
     }));
   };
 
-  // Show loading spinner while verifying HTTP-Only cookie session
+  // Loading screen
   if (checkingAuth) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-emerald-50/50">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mb-3" />
-        <p className="text-xs font-semibold text-emerald-800">Verificando sessão segura...</p>
+      <div className="min-h-screen flex flex-col justify-center items-center bg-red-50/50">
+        <Loader2 className="w-8 h-8 text-red-600 animate-spin mb-3" />
+
+        <p className="text-xs font-semibold text-red-800">
+          Verificando sessão segura...
+        </p>
       </div>
     );
   }
 
-  // If not logged in, render Login screen
+  // Login screen
   if (!currentUser) {
     return <LoginView onLoginSuccess={handleLoginSuccess} />;
   }
 
-  // Calculate statistics for Direção dashboard
-  const studentCount = users.filter((u) => u.role === 'aluno').length;
-  const nutriCount = users.filter((u) => u.role === 'nutricionista').length;
-  const activeCommentsCount = comments.filter((c) => c.status === 'Ativo').length;
-  const removedCommentsCount = comments.filter((c) => c.status === 'Removido').length;
+  // Statistics
+  const studentCount = users.filter(
+    (u) => u.role === 'aluno'
+  ).length;
+
+  const nutriCount = users.filter(
+    (u) => u.role === 'nutricionista'
+  ).length;
+
+  const activeCommentsCount = comments.filter(
+    (c) => c.status === 'Ativo'
+  ).length;
+
+  const removedCommentsCount = comments.filter(
+    (c) => c.status === 'Removido'
+  ).length;
 
   return (
-    <div className="min-h-screen bg-[#f4f9f5] flex flex-col font-sans antialiased text-gray-800">
-      {/* Header Bar */}
+    <div className="min-h-screen bg-[#fafafa] flex flex-col font-sans antialiased text-gray-800">
+
+      {/* Header */}
       <Header
         user={currentUser}
         activeTab={activeTab}
@@ -228,7 +269,8 @@ export const App: React.FC = () => {
 
       {/* Main View Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Direção Views */}
+
+        {/* Direção */}
         {currentUser.role === 'direcao' && (
           <>
             {activeTab === 'painel' && (
@@ -242,11 +284,15 @@ export const App: React.FC = () => {
             )}
 
             {activeTab === 'cadastrar-aluno' && (
-              <StudentRegisterView onAddStudent={handleAddStudent} />
+              <StudentRegisterView
+                onAddStudent={handleAddStudent}
+              />
             )}
 
             {activeTab === 'cadastrar-nutricionista' && (
-              <NutritionistRegisterView onAddNutritionist={handleAddNutritionist} />
+              <NutritionistRegisterView
+                onAddNutritionist={handleAddNutritionist}
+              />
             )}
 
             {activeTab === 'gerenciar-usuarios' && (
@@ -269,7 +315,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {/* Nutricionista Views */}
+        {/* Nutricionista */}
         {currentUser.role === 'nutricionista' && (
           <>
             {activeTab === 'gerenciar-cardapio' && (
@@ -281,10 +327,12 @@ export const App: React.FC = () => {
 
             {activeTab === 'comentarios' && (
               <div className="space-y-6 max-w-5xl mx-auto">
+
                 <div>
                   <h2 className="text-2xl font-extrabold text-gray-900">
                     Comentários dos Alunos
                   </h2>
+
                   <p className="text-xs text-gray-500 mt-1">
                     Feedback dos alunos sobre os cardápios servidos.
                   </p>
@@ -299,12 +347,21 @@ export const App: React.FC = () => {
                         className="bg-white p-5 rounded-2xl border border-gray-100 shadow-xs flex flex-col justify-between"
                       >
                         <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="font-bold text-gray-900">{item.studentName}</span>
-                          <span className="text-gray-400 text-[11px]">{item.date}</span>
+                          <span className="font-bold text-gray-900">
+                            {item.studentName}
+                          </span>
+
+                          <span className="text-gray-400 text-[11px]">
+                            {item.date}
+                          </span>
                         </div>
-                        <p className="text-xs text-gray-600 leading-relaxed">{item.comment}</p>
+
+                        <p className="text-xs text-gray-600 leading-relaxed">
+                          {item.comment}
+                        </p>
                       </div>
                     ))}
+
                   {comments.filter((c) => c.status === 'Ativo').length === 0 && (
                     <div className="bg-white p-6 rounded-2xl text-center text-xs text-gray-400">
                       Nenhum comentário publicado pelos alunos ainda.
@@ -316,7 +373,7 @@ export const App: React.FC = () => {
           </>
         )}
 
-        {/* Aluno Views */}
+        {/* Aluno */}
         {currentUser.role === 'aluno' && (
           <StudentMenuView
             studentName={currentUser.name}
@@ -329,8 +386,10 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-emerald-100 bg-white py-4 text-center text-xs text-gray-400">
-        <p>Connect Food © 2026 — Gestão Nutricional Escolar SESI</p>
+      <footer className="border-t border-red-100 bg-white py-4 text-center text-xs text-gray-400">
+        <p>
+          Connect Food © 2026 — Gestão Nutricional Escolar SESI
+        </p>
       </footer>
 
       {/* User Profile Modal */}

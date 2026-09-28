@@ -17,6 +17,7 @@ export const CommentModerationView: React.FC<CommentModerationViewProps> = ({
       `Motivo da remoção do comentário de ${comment.studentName}:`,
       'Linguagem inadequada'
     );
+
     if (reason !== null) {
       onRemoveComment(comment.id, reason || 'Linguagem inadequada');
     }
@@ -25,7 +26,10 @@ export const CommentModerationView: React.FC<CommentModerationViewProps> = ({
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <div>
-        <h2 className="text-2xl font-extrabold text-gray-900">Fiscalização de Comentários</h2>
+        <h2 className="text-2xl font-extrabold text-gray-900">
+          Fiscalização de Comentários
+        </h2>
+
         <p className="text-xs text-gray-500 mt-1">
           Comentários removidos deixam de aparecer para alunos e nutricionistas.
         </p>
@@ -44,20 +48,35 @@ export const CommentModerationView: React.FC<CommentModerationViewProps> = ({
                 <th className="py-4 px-6 text-right">Ações</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-100 text-xs text-gray-700">
               {comments.map((item) => (
-                <tr key={item.id} className="hover:bg-emerald-50/30 transition-colors">
-                  <td className="py-4 px-6 font-bold text-gray-900">{item.studentName}</td>
+                <tr
+                  key={item.id}
+                  className="hover:bg-red-50/30 transition-colors"
+                >
+                  <td className="py-4 px-6 font-bold text-gray-900">
+                    {item.studentName}
+                  </td>
+
                   <td className="py-4 px-6 max-w-xs text-gray-600 leading-relaxed">
                     {item.comment}
                   </td>
-                  <td className="py-4 px-6 text-gray-500 whitespace-nowrap">{item.date}</td>
-                  <td className="py-4 px-6 text-gray-600 whitespace-nowrap">{item.menuInfo}</td>
+
+                  <td className="py-4 px-6 text-gray-500 whitespace-nowrap">
+                    {item.date}
+                  </td>
+
+                  <td className="py-4 px-6 text-gray-600 whitespace-nowrap">
+                    {item.menuInfo}
+                  </td>
+
                   <td className="py-4 px-6">
                     <Badge variant={item.status === 'Ativo' ? 'active' : 'removed'}>
                       {item.status}
                     </Badge>
                   </td>
+
                   <td className="py-4 px-6 text-right whitespace-nowrap">
                     {item.status === 'Ativo' ? (
                       <button

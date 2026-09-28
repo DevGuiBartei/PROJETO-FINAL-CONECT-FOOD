@@ -6,13 +6,18 @@ interface BadgeProps {
   className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ variant, children, className = '' }) => {
+export const Badge: React.FC<BadgeProps> = ({
+  variant,
+  children,
+  className = '',
+}) => {
+
   const styles = {
-    active: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-    removed: 'bg-red-100 text-red-700 border-red-200',
+    active: 'bg-red-50 text-[#FF2C2C] border-red-200',
+    removed: 'bg-red-50 text-[#FF2C2C] border-red-200',
     inactive: 'bg-gray-100 text-gray-600 border-gray-200',
-    info: 'bg-amber-100 text-amber-800 border-amber-200',
-    warning: 'bg-orange-100 text-orange-800 border-orange-200',
+    info: 'bg-gray-100 text-gray-700 border-gray-200',
+    warning: 'bg-gray-100 text-gray-700 border-gray-200',
   };
 
   return (

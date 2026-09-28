@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { UtensilsCrossed, User as UserIcon, LogOut } from 'lucide-react';
+
 import type { User, DirecaoTab, NutriTab } from '../../types';
 
 interface HeaderProps {
@@ -17,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfile,
   onLogout,
 }) => {
+
   const getSubTitle = () => {
     switch (user.role) {
       case 'direcao':
@@ -31,7 +34,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   const renderTabs = () => {
+
     if (user.role === 'direcao') {
+
       const tabs: { id: DirecaoTab; label: string }[] = [
         { id: 'painel', label: 'Painel' },
         { id: 'cadastrar-aluno', label: 'Cadastrar aluno' },
@@ -43,26 +48,30 @@ export const Header: React.FC<HeaderProps> = ({
       return (
         <div className="flex flex-wrap items-center gap-1 sm:gap-2">
           {tabs.map((t) => {
+
             const isActive = activeTab === t.id;
+
             return (
               <button
                 key={t.id}
                 onClick={() => onSelectTab(t.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-emerald-200 text-emerald-900 shadow-sm font-semibold'
-                    : 'text-gray-600 hover:text-emerald-800 hover:bg-emerald-50'
+                    ? 'bg-[#FF2C2C] text-white shadow-sm font-semibold'
+                    : 'text-gray-600 hover:text-[#FF2C2C] hover:bg-gray-100'
                 }`}
               >
                 {t.label}
               </button>
             );
+
           })}
         </div>
       );
     }
 
     if (user.role === 'nutricionista') {
+
       const tabs: { id: NutriTab; label: string }[] = [
         { id: 'gerenciar-cardapio', label: 'Gerenciar cardápio' },
         { id: 'comentarios', label: 'Comentários dos alunos' },
@@ -71,20 +80,23 @@ export const Header: React.FC<HeaderProps> = ({
       return (
         <div className="flex flex-wrap items-center gap-2">
           {tabs.map((t) => {
+
             const isActive = activeTab === t.id;
+
             return (
               <button
                 key={t.id}
                 onClick={() => onSelectTab(t.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                   isActive
-                    ? 'bg-emerald-200 text-emerald-900 shadow-sm font-semibold'
-                    : 'text-gray-600 hover:text-emerald-800 hover:bg-emerald-50'
+                    ? 'bg-[#FF2C2C] text-white shadow-sm font-semibold'
+                    : 'text-gray-600 hover:text-[#FF2C2C] hover:bg-gray-100'
                 }`}
               >
                 {t.label}
               </button>
             );
+
           })}
         </div>
       );
@@ -94,60 +106,101 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="bg-white border-b border-emerald-100/60 shadow-xs sticky top-0 z-30">
+    <header className="bg-white border-b border-gray-200 shadow-xs sticky top-0 z-30">
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+
         {/* Left: Brand Logo & Title */}
+
         <div className="flex items-center gap-6">
+
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-sm">
+
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm"
+              style={{ backgroundColor: '#FF2C2C' }}
+            >
               <UtensilsCrossed className="w-5 h-5" />
             </div>
+
             <div>
-              <h1 className="text-lg font-extrabold text-emerald-900 leading-tight">
+
+              <h1
+                className="text-lg font-extrabold leading-tight"
+                style={{ color: '#FF2C2C' }}
+              >
                 Connect Food
               </h1>
+
               <span className="text-[10px] font-semibold tracking-wider text-gray-500 uppercase block">
                 {getSubTitle()}
               </span>
+
             </div>
+
           </div>
 
           {/* Navigation Tabs */}
-          <nav className="hidden md:flex items-center ml-4">{renderTabs()}</nav>
+
+          <nav className="hidden md:flex items-center ml-4">
+            {renderTabs()}
+          </nav>
+
         </div>
 
         {/* Right: User Profile & Logout */}
+
         <div className="flex items-center gap-4">
+
           <button
             onClick={onOpenProfile}
             className="flex items-center gap-2 text-left group hover:opacity-90 transition-opacity"
             title="Ver meu perfil"
           >
+
             <div className="hidden sm:block text-right">
-              <p className="text-xs font-bold text-gray-800 group-hover:text-emerald-700">
+
+              <p className="text-xs font-bold text-gray-800 group-hover:text-[#FF2C2C]">
                 {user.name}
               </p>
-              <p className="text-[10px] text-gray-500 capitalize">{user.roleLabel}</p>
+
+              <p className="text-[10px] text-gray-500 capitalize">
+                {user.roleLabel}
+              </p>
+
             </div>
-            <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center border border-amber-200 shadow-xs group-hover:scale-105 transition-transform">
+
+            <div
+              className="w-9 h-9 rounded-full flex items-center justify-center border shadow-xs group-hover:scale-105 transition-transform"
+              style={{
+                backgroundColor: '#F5F5F5',
+                color: '#FF2C2C',
+                borderColor: '#E5E5E5',
+              }}
+            >
               <UserIcon className="w-4 h-4" />
             </div>
+
           </button>
 
           <button
             onClick={onLogout}
-            className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-red-600 px-2 py-1.5 rounded-md hover:bg-red-50 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-[#FF2C2C] px-2 py-1.5 rounded-md hover:bg-gray-100 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Sair</span>
           </button>
+
         </div>
+
       </div>
 
       {/* Mobile nav pills row */}
-      <div className="md:hidden border-t border-gray-100 px-4 py-2 bg-emerald-50/50 flex overflow-x-auto gap-2">
+
+      <div className="md:hidden border-t border-gray-200 px-4 py-2 bg-[#F5F5F5] flex overflow-x-auto gap-2">
         {renderTabs()}
       </div>
+
     </header>
   );
 };

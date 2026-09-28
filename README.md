@@ -383,7 +383,8 @@ node test_integration.js
 
 1️⃣ Login como NUTRICIONISTA (nutri@sesi.com)... Status: 200 ✅ LOGIN NUTRICIONISTA OK!
 2️⃣ Salvando Almoço de Segunda-feira e Terça-feira no MySQL... Status: 200 ✅ REFEIÇÕES SALVAS!
-3️⃣ Login como ALUNO (aluno@sesi.com) e validação dos cardápios... Status: 200 ✅ CARDÁPIOS DE SEGUNDA E TERÇA EXIBIDOS!
+3️⃣ Login como ALUNO (aluno@sesi.com) e valida
+ção dos cardápios... Status: 200 ✅ CARDÁPIOS DE SEGUNDA E TERÇA EXIBIDOS!
 4️⃣ Avaliação de 5 Estrelas pelo Aluno... Status: 200 ✅ AVALIAÇÃO PERSISTIDA NO MYSQL!
 5️⃣ Envio de Comentário pelo Aluno... Status: 201 ✅ COMENTÁRIO PUBLICADO!
 6️⃣ Login como DIREÇÃO (direcao@sesi.com) e Moderação do Comentário... Status: 200 ✅ MODERAÇÃO CONCLUÍDA!

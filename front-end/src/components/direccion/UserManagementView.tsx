@@ -14,7 +14,9 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
   onToggleUserStatus,
   onViewUser,
 }) => {
-  const [filter, setFilter] = useState<'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'>('Todos');
+  const [filter, setFilter] = useState<
+    'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'
+  >('Todos');
 
   const filteredUsers = users.filter((u) => {
     if (filter === 'Todos') return true;
@@ -25,7 +27,9 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
     return true;
   });
 
-  const filterOptions: Array<'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'> = [
+  const filterOptions: Array<
+    'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'
+  > = [
     'Todos',
     'Aluno',
     'Nutricionista',
@@ -36,7 +40,9 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <div>
-        <h2 className="text-2xl font-extrabold text-gray-900">Gerenciamento de Usuários</h2>
+        <h2 className="text-2xl font-extrabold text-gray-900">
+          Gerenciamento de Usuários
+        </h2>
       </div>
 
       {/* Filter Pills Bar */}
@@ -47,7 +53,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
             onClick={() => setFilter(opt)}
             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
               filter === opt
-                ? 'bg-emerald-700 text-white font-semibold shadow-xs'
+                ? 'bg-red-700 text-white font-semibold shadow-xs'
                 : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
             }`}
           >
@@ -71,28 +77,54 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                 <th className="py-3.5 px-6 text-right">Ações</th>
               </tr>
             </thead>
+
             <tbody className="divide-y divide-gray-100 text-xs text-gray-700">
               {filteredUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-emerald-50/30 transition-colors">
-                  <td className="py-4 px-6 font-semibold text-gray-900">{user.name}</td>
-                  <td className="py-4 px-6 text-gray-500">{user.cpf}</td>
-                  <td className="py-4 px-6 text-gray-600">{user.email}</td>
-                  <td className="py-4 px-6 font-medium text-gray-800">{user.roleLabel}</td>
+                <tr
+                  key={user.id}
+                  className="hover:bg-red-50/30 transition-colors"
+                >
+                  <td className="py-4 px-6 font-semibold text-gray-900">
+                    {user.name}
+                  </td>
+
+                  <td className="py-4 px-6 text-gray-500">
+                    {user.cpf}
+                  </td>
+
+                  <td className="py-4 px-6 text-gray-600">
+                    {user.email}
+                  </td>
+
+                  <td className="py-4 px-6 font-medium text-gray-800">
+                    {user.roleLabel}
+                  </td>
+
                   <td className="py-4 px-6">
-                    <Badge variant={user.status === 'Ativo' ? 'active' : 'inactive'}>
+                    <Badge
+                      variant={user.status === 'Ativo' ? 'active' : 'inactive'}
+                    >
                       {user.status}
                     </Badge>
                   </td>
-                  <td className="py-4 px-6 text-gray-500">{user.createdAt}</td>
+
+                  <td className="py-4 px-6 text-gray-500">
+                    {user.createdAt}
+                  </td>
+
                   <td className="py-4 px-6 text-right">
                     <div className="flex items-center justify-end gap-3 text-gray-500">
+
+                      {/* Visualizar */}
                       <button
                         onClick={() => onViewUser(user)}
-                        className="hover:text-emerald-700 p-1 rounded-md transition-colors"
+                        className="hover:text-red-700 p-1 rounded-md transition-colors"
                         title="Visualizar usuário"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
+
+                      {/* Editar */}
                       <button
                         onClick={() => alert(`Editar usuário ${user.name}`)}
                         className="hover:text-blue-600 p-1 rounded-md transition-colors"
@@ -100,17 +132,24 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
+
+                      {/* Ativar / Desativar */}
                       <button
                         onClick={() => onToggleUserStatus(user.id)}
                         className={`p-1 rounded-md transition-colors ${
                           user.status === 'Ativo'
                             ? 'hover:text-red-600 text-gray-400'
-                            : 'text-emerald-600 hover:text-emerald-800'
+                            : 'text-red-600 hover:text-red-800'
                         }`}
-                        title={user.status === 'Ativo' ? 'Desativar usuário' : 'Ativar usuário'}
+                        title={
+                          user.status === 'Ativo'
+                            ? 'Desativar usuário'
+                            : 'Ativar usuário'
+                        }
                       >
                         <Power className="w-4 h-4" />
                       </button>
+
                     </div>
                   </td>
                 </tr>
@@ -118,7 +157,10 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
 
               {filteredUsers.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-gray-400 text-xs">
+                  <td
+                    colSpan={7}
+                    className="py-8 text-center text-gray-400 text-xs"
+                  >
                     Nenhum usuário encontrado com os filtros selecionados.
                   </td>
                 </tr>
