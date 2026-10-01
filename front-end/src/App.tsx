@@ -111,12 +111,13 @@ export const App: React.FC = () => {
   };
 
   // Add new student
-  const handleAddStudent = async (studentData: Omit<User, 'id' | 'createdAt'>) => {
+  const handleAddStudent = async (studentData: Omit<User, 'id' | 'createdAt'> & { password?: string }) => {
     try {
       const res = await api.createStudent({
         name: studentData.name,
         cpf: studentData.cpf,
         email: studentData.email,
+        password: studentData.password || '',
         schoolYear: studentData.schoolYear,
         dietaryRestriction: studentData.dietaryRestriction,
       });
@@ -127,18 +128,20 @@ export const App: React.FC = () => {
       ]);
     } catch (err: any) {
       alert(err.message || 'Erro ao cadastrar aluno');
+      throw err;
     }
   };
 
   // Add new nutritionist
   const handleAddNutritionist = async (
-    nutriData: Omit<User, 'id' | 'createdAt'>
+    nutriData: Omit<User, 'id' | 'createdAt'> & { password?: string }
   ) => {
     try {
       const res = await api.createNutritionist({
         name: nutriData.name,
         cpf: nutriData.cpf,
         email: nutriData.email,
+        password: nutriData.password || '',
       });
 
       setUsers((prev) => [
@@ -147,6 +150,7 @@ export const App: React.FC = () => {
       ]);
     } catch (err: any) {
       alert(err.message || 'Erro ao cadastrar nutricionista');
+      throw err;
     }
   };
 

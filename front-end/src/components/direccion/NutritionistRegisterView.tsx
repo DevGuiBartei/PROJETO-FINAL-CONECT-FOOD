@@ -4,7 +4,7 @@ import type { User } from '../../types';
 interface NutritionistRegisterViewProps {
   onAddNutritionist: (
     newNutri: Omit<User, 'id' | 'createdAt'> & { password: string }
-  ) => void;
+  ) => Promise<void> | void;
 }
 
 export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> = ({
@@ -15,26 +15,37 @@ export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> =
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSuccessMsg('');
+    setErrorMsg('');
+    setLoading(true);
 
-    onAddNutritionist({
-    name,
-    cpf,
-    email,
-    password,
-    role: 'nutricionista',
-    roleLabel: 'Nutricionista',
-    status: 'Ativo',
-  });
+    try {
+      await onAddNutritionist({
+        name,
+        cpf,
+        email,
+        password,
+        role: 'nutricionista',
+        roleLabel: 'Nutricionista',
+        status: 'Ativo',
+      });
 
-    setSuccessMsg(`Nutricionista ${name} cadastrada com sucesso!`);
-    setName('');
-    setCpf('');
-    setEmail('');
-    setPassword('');
-    setTimeout(() => setSuccessMsg(''), 4000);
+      setSuccessMsg(`Nutricionista ${name} cadastrada com sucesso!`);
+      setName('');
+      setCpf('');
+      setEmail('');
+      setPassword('');
+      setTimeout(() => setSuccessMsg(''), 4000);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Erro ao cadastrar nutricionista.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,8 +61,14 @@ export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> =
       </div>
 
       {successMsg && (
-        <div className="p-4 bg-red-50 text-red-800 border border-red-200 text-xs font-semibold rounded-xl animate-in fade-in">
+        <div className="p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold rounded-xl animate-in fade-in">
           {successMsg}
+        </div>
+      )}
+
+      {errorMsg && (
+        <div className="p-4 bg-red-50 text-red-800 border border-red-200 text-xs font-semibold rounded-xl animate-in fade-in">
+          {errorMsg}
         </div>
       )}
 
@@ -121,9 +138,10 @@ export const NutritionistRegisterView: React.FC<NutritionistRegisterViewProps> =
           <div className="pt-4">
             <button
               type="submit"
-              className="bg-red-700 hover:bg-red-800 text-white font-semibold text-xs px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md"
+              disabled={loading}
+              className="bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white font-semibold text-xs px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md"
             >
-              Cadastrar nutricionista
+              {loading ? 'Cadastrando...' : 'Cadastrar nutricionista'}
             </button>
           </div>
 
