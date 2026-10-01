@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import type { User } from '../../types';
 
 interface StudentRegisterViewProps {
-  onAddStudent: (newStudent: Omit<User, 'id' | 'createdAt'>) => void;
+  onAddStudent: (
+    newStudent: Omit<User, 'id' | 'createdAt'> & { password: string }
+  ) => Promise<void> | void;
 }
 
 export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
@@ -16,27 +18,39 @@ export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
   const [hasRestriction, setHasRestriction] = useState<boolean>(false);
   const [restrictionText, setRestrictionText] = useState('Intolerância à lactose');
   const [successMsg, setSuccessMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSuccessMsg('');
+    setErrorMsg('');
+    setLoading(true);
 
-    onAddStudent({
-      name,
-      cpf: cpf || '...***-00',
-      email,
-      role: 'aluno',
-      roleLabel: 'Aluno',
-      status: 'Ativo',
-      schoolYear,
-      dietaryRestriction: hasRestriction ? restrictionText : 'Sem restrição',
-    });
+    try {
+      await onAddStudent({
+        name,
+        cpf: cpf || '...***-00',
+        email,
+        password,
+        role: 'aluno',
+        roleLabel: 'Aluno',
+        status: 'Ativo',
+        schoolYear,
+        dietaryRestriction: hasRestriction ? restrictionText : 'Sem restrição',
+      });
 
-    setSuccessMsg(`Aluno(a) ${name} cadastrado(a) com sucesso!`);
-    setName('');
-    setCpf('');
-    setEmail('');
-    setPassword('');
-    setTimeout(() => setSuccessMsg(''), 4000);
+      setSuccessMsg(`Aluno(a) ${name} cadastrado(a) com sucesso!`);
+      setName('');
+      setCpf('');
+      setEmail('');
+      setPassword('');
+      setTimeout(() => setSuccessMsg(''), 4000);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Erro ao cadastrar aluno.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,8 +67,14 @@ export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
       </div>
 
       {successMsg && (
-        <div className="p-4 bg-red-50 text-red-800 border border-red-200 text-xs font-semibold rounded-xl animate-in fade-in">
+        <div className="p-4 bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold rounded-xl animate-in fade-in">
           {successMsg}
+        </div>
+      )}
+
+      {errorMsg && (
+        <div className="p-4 bg-red-50 text-red-800 border border-red-200 text-xs font-semibold rounded-xl animate-in fade-in">
+          {errorMsg}
         </div>
       )}
 
@@ -190,9 +210,10 @@ export const StudentRegisterView: React.FC<StudentRegisterViewProps> = ({
           <div className="pt-4">
             <button
               type="submit"
-              className="bg-red-700 hover:bg-red-800 text-white font-semibold text-xs px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md"
+              disabled={loading}
+              className="bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white font-semibold text-xs px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md"
             >
-              Cadastrar aluno
+              {loading ? 'Cadastrando...' : 'Cadastrar aluno'}
             </button>
           </div>
 
