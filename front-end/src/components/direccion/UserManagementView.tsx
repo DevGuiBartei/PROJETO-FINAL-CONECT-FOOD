@@ -18,10 +18,19 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
   onSaveUser,
 }) => {
   const [filter, setFilter] = useState<
-    'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'
-  >('Todos');
+    "Todos" | "Aluno" | "Nutricionista" | "Ativo" | "Inativo"
+  >("Todos");
 
   const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  const [editForm, setEditForm] = useState({
+    name: "",
+    cpf: "",
+    email: "",
+    role: "",
+    schoolYear: "",
+    dietaryRestriction: "",
+  });
 
   const filteredUsers = users.filter((u) => {
     if (filter === "Todos") return true;
@@ -33,14 +42,8 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
   });
 
   const filterOptions: Array<
-    'Todos' | 'Aluno' | 'Nutricionista' | 'Ativo' | 'Inativo'
-  > = [
-    'Todos',
-    'Aluno',
-    'Nutricionista',
-    'Ativo',
-    'Inativo',
-  ];
+    "Todos" | "Aluno" | "Nutricionista" | "Ativo" | "Inativo"
+  > = ["Todos", "Aluno", "Nutricionista", "Ativo", "Inativo"];
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -58,8 +61,8 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
             onClick={() => setFilter(opt)}
             className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
               filter === opt
-                ? 'bg-red-700 text-white font-semibold shadow-xs'
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+                ? "bg-[#FA003F] text-white font-semibold shadow-xs"
+                : "bg-white text-gray-600 border border-gray-200 hover:bg-gray-50"
             }`}
           >
             {opt}
@@ -82,54 +85,37 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                 <th className="py-3.5 px-6 text-right">Ações</th>
               </tr>
             </thead>
-
             <tbody className="divide-y divide-gray-100 text-xs text-gray-700">
               {filteredUsers.map((user) => (
                 <tr
                   key={user.id}
-                  className="hover:bg-red-50/30 transition-colors"
+                  className="hover:bg-emerald-50/30 transition-colors"
                 >
                   <td className="py-4 px-6 font-semibold text-gray-900">
                     {user.name}
                   </td>
-
-                  <td className="py-4 px-6 text-gray-500">
-                    {user.cpf}
-                  </td>
-
-                  <td className="py-4 px-6 text-gray-600">
-                    {user.email}
-                  </td>
-
+                  <td className="py-4 px-6 text-gray-500">{user.cpf}</td>
+                  <td className="py-4 px-6 text-gray-600">{user.email}</td>
                   <td className="py-4 px-6 font-medium text-gray-800">
                     {user.roleLabel}
                   </td>
-
                   <td className="py-4 px-6">
                     <Badge
-                      variant={user.status === 'Ativo' ? 'active' : 'inactive'}
+                      variant={user.status === "Ativo" ? "active" : "inactive"}
                     >
                       {user.status}
                     </Badge>
                   </td>
-
-                  <td className="py-4 px-6 text-gray-500">
-                    {user.createdAt}
-                  </td>
-
+                  <td className="py-4 px-6 text-gray-500">{user.createdAt}</td>
                   <td className="py-4 px-6 text-right">
                     <div className="flex items-center justify-end gap-3 text-gray-500">
-
-                      {/* Visualizar */}
                       <button
                         onClick={() => onViewUser(user)}
-                        className="hover:text-red-700 p-1 rounded-md transition-colors"
+                        className="hover:text-emerald-700 p-1 rounded-md transition-colors"
                         title="Visualizar usuário"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
-
-                      {/* Editar */}
                       <button
                         onClick={() => {
                           setEditingUser(user);
@@ -151,24 +137,21 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
-
-                      {/* Ativar / Desativar */}
                       <button
                         onClick={() => onToggleUserStatus(user.id)}
                         className={`p-1 rounded-md transition-colors ${
-                          user.status === 'Ativo'
-                            ? 'hover:text-red-600 text-gray-400'
-                            : 'text-red-600 hover:text-red-800'
+                          user.status === "Ativo"
+                            ? "hover:text-red-600 text-gray-400"
+                            : "text-emerald-600 hover:text-emerald-800"
                         }`}
                         title={
-                          user.status === 'Ativo'
-                            ? 'Desativar usuário'
-                            : 'Ativar usuário'
+                          user.status === "Ativo"
+                            ? "Desativar usuário"
+                            : "Ativar usuário"
                         }
                       >
                         <Power className="w-4 h-4" />
                       </button>
-
                     </div>
                   </td>
                 </tr>
@@ -230,7 +213,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       name: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                 />
               </div>
 
@@ -249,7 +232,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       cpf: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                 />
               </div>
 
@@ -267,7 +250,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       email: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                 />
               </div>
 
@@ -285,7 +268,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                       role: e.target.value,
                     })
                   }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                 >
                   <option value="aluno">Aluno</option>
                   <option value="nutricionista">Nutricionista</option>
@@ -309,7 +292,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                         schoolYear: e.target.value,
                       })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                   />
                 </div>
               )}
@@ -330,7 +313,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
                         dietaryRestriction: e.target.value,
                       })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[#FA003F]"
                   />
                 </div>
               )}
@@ -363,7 +346,7 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
 
                   setEditingUser(null);
                 }}
-                className="px-4 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-800"
+                className="px-4 py-2 rounded-lg bg-[#FA003F] text-white hover:bg-[#D90036]"
               >
                 Salvar alterações
               </button>
