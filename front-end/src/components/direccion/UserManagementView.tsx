@@ -21,33 +21,6 @@ export const UserManagementView: React.FC<UserManagementViewProps> = ({
     "Todos" | "Aluno" | "Nutricionista" | "Ativo" | "Inativo"
   >("Todos");
 
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-
-  const [editForm, setEditForm] = useState({
-    name: "",
-    cpf: "",
-    email: "",
-    role: "",
-    schoolYear: "",
-    dietaryRestriction: "",
-  });
-
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [editForm, setEditForm] = useState<{
-    name: string;
-    cpf: string;
-    email: string;
-    role: string;
-    schoolYear: string;
-    dietaryRestriction: string;
-  }>({
-    name: '',
-    cpf: '',
-    email: '',
-    role: 'aluno',
-    schoolYear: '',
-    dietaryRestriction: '',
-  });
 
   const filteredUsers = users.filter((u) => {
     if (filter === "Todos") return true;
