@@ -56,6 +56,27 @@ export const api = {
     });
   },
 
+    // Recuperação de senha
+  forgotPassword: async (
+    email: string,
+    cpf: string
+  ): Promise<{ mensagem: string }> => {
+    return request<{ mensagem: string }>('/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email, cpf }),
+    });
+  },
+
+  resetPassword: async (
+    token: string,
+    password: string
+  ): Promise<{ mensagem: string }> => {
+    return request<{ mensagem: string }>('/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token, password }),
+    });
+  },
+
   getUsers: async (): Promise<User[]> => {
     return request<User[]>('/usuarios', {
       method: 'GET',

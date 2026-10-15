@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo} from 'react';
 import { Coffee, UtensilsCrossed, Cookie } from 'lucide-react';
 import type { DailyMealPlan, CommentItem } from '../../types';
 import { RatingStars } from '../common/RatingStars';
@@ -90,9 +90,9 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
     }
   };
 
-  const activeComments = comments.filter(
-    (c) => c.status === 'Ativo'
-  );
+  const activeComments = useMemo(() => {
+    return comments.filter((c) => c.status === 'Ativo');
+  }, [comments]);
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
