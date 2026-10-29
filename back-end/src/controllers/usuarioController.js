@@ -382,24 +382,47 @@ class UsuarioController {
 
 
 
-    // PATCH /usuarios/:id/status
     async toggleStatus(req, res) {
-        try {
-            const { id } = req.params;
-            const [rows] = await pool.query('SELECT status FROM usuarios WHERE id_usuario = ?', [id]);
-            if (rows.length === 0) {
-                return res.status(404).json({ erro: 'Usuário não encontrado' });
-            }
+    try {
+        const { id } = req.params;
 
-            const newStatus = !rows[0].status;
-            await pool.query('UPDATE usuarios SET status = ? WHERE id_usuario = ?', [newStatus, id]);
+        const [rows] = await pool.query(
+            'SELECT perfil, status FROM usuarios WHERE id_usuario = ?',
+            [id]
+        );
 
-            return res.json({ mensagem: 'Status alterado com sucesso', status: newStatus ? 'Ativo' : 'Inativo' });
-        } catch (error) {
-            console.error('Erro ao alterar status:', error);
-            return res.status(500).json({ erro: 'Erro ao alterar status do usuário' });
+        if (rows.length === 0) {
+            return res.status(404).json({
+                erro: 'Usuário não encontrado'
+            });
         }
+
+        if (rows[0].perfil === 'DIRECAO') {
+            return res.status(403).json({
+                erro: 'Não é permitido alterar o status de uma conta da Direção.'
+            });
+        }
+
+        const newStatus = !rows[0].status;
+
+        await pool.query(
+            'UPDATE usuarios SET status = ? WHERE id_usuario = ?',
+            [newStatus, id]
+        );
+
+        return res.json({
+            mensagem: 'Status alterado com sucesso',
+            status: newStatus ? 'Ativo' : 'Inativo'
+        });
+
+    } catch (error) {
+        console.error('Erro ao alterar status:', error);
+
+        return res.status(500).json({
+            erro: 'Erro ao alterar status do usuário'
+        });
     }
+}
 
 }
 
