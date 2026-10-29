@@ -154,7 +154,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
             <div className="flex items-center gap-3 mb-5">
 
               <div className="w-9 h-9 rounded-full bg-red-100 text-red-800 flex items-center justify-center">
-                <Coffee className="w-4 h-4" />
+            <Coffee className="w-4 h-4 !stroke-[#F472B6]" />
               </div>
 
               <h3 className="text-sm font-bold text-gray-900">
@@ -194,7 +194,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
             <div className="flex items-center gap-3 mb-5">
 
               <div className="w-9 h-9 rounded-full bg-red-100 text-red-800 flex items-center justify-center">
-                <UtensilsCrossed className="w-4 h-4" />
+             <Cookie className="!w-4 !h-4 !text-pink-400 !stroke-pink-400" />
               </div>
 
               <h3 className="text-sm font-bold text-gray-900">
@@ -234,7 +234,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
             <div className="flex items-center gap-3 mb-5">
 
               <div className="w-9 h-9 rounded-full bg-red-100 text-red-800 flex items-center justify-center">
-                <Cookie className="w-4 h-4" />
+               <Coffee className="!w-4 !h-4 !text-pink-400 !stroke-pink-400" />
               </div>
 
               <h3 className="text-sm font-bold text-gray-900">
@@ -278,7 +278,7 @@ export const StudentMenuView: React.FC<StudentMenuViewProps> = ({
           </h3>
 
           {avgRating > 0 && (
-            <span className="text-xs font-semibold text-red-700 bg-red-50 px-3 py-1 rounded-full border border-red-200">
+            <span className="text-red-700 para text-black">
               Média geral do cardápio: ★ {avgRating} / 5
             </span>
           )}
